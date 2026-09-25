@@ -1,0 +1,14 @@
+name: Dev
+variables:
+  - name: baseUrl
+    value: http://localhost:4100
+  - name: expectedEnv
+    value: dev
+  - name: username
+    value: demo
+  - name: password
+    value: demo
+  - name: ollamaUrl
+    value: http://localhost:11434
+  - name: ollamaModel
+    value: llama3.2

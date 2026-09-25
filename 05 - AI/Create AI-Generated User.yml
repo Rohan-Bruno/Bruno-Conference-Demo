@@ -1,0 +1,29 @@
+info:
+  name: Create AI-Generated User
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseUrl}}/users"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "{{aiUserName}}"
+      }
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("user created from AI-generated data", function () {
+          expect(res.getStatus()).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

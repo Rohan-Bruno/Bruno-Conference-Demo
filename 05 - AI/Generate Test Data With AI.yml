@@ -1,0 +1,43 @@
+info:
+  name: Generate Test Data With AI
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{ollamaUrl}}/api/chat"
+  body:
+    type: json
+    data: |-
+      {
+        "model": "{{ollamaModel}}",
+        "stream": false,
+        "format": "json",
+        "messages": [
+          { "role": "user", "content": "Return JSON only: {\"name\": <a fictional open source developer name>, \"role\": \"contributor\"}" }
+        ]
+      }
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        // Parse the model output and store it, then run 02 > Create User style request below.
+        try {
+          const generated = JSON.parse(res.getBody().message.content);
+          bru.setVar("aiUserName", generated.name);
+        } catch (e) {
+          bru.setVar("aiUserName", "AI Fallback User");
+        }
+    - type: tests
+      code: |-
+        test("model produced a name", function () {
+          expect(bru.getVar("aiUserName")).to.be.a("string").and.not.empty;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

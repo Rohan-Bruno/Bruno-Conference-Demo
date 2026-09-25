@@ -1,0 +1,38 @@
+info:
+  name: Ask Local Model (Ollama)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{ollamaUrl}}/api/chat"
+  body:
+    type: json
+    data: |-
+      {
+        "model": "{{ollamaModel}}",
+        "stream": false,
+        "messages": [
+          { "role": "user", "content": "In one sentence, why should API collections live in git?" }
+        ]
+      }
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("model answered", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().message.content).to.be.a("string").and.not.empty;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+docs: |-
+  Runs 100% locally against Ollama. No API key, no data leaves the laptop.
+  Pre-pull the model the night before: ollama pull llama3.2

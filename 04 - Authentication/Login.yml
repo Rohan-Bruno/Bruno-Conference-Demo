@@ -1,0 +1,37 @@
+info:
+  name: Login
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "username": "{{username}}",
+        "password": "{{password}}"
+      }
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        // Store the token as a runtime variable. It is never written to disk / git.
+        if (res.getStatus() === 200) {
+          bru.setVar("token", res.getBody().token);
+        }
+    - type: tests
+      code: |-
+        test("login succeeds and returns a token", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().token).to.be.a("string");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

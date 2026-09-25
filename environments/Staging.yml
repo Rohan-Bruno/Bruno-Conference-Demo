@@ -1,0 +1,20 @@
+name: Staging
+variables:
+  - name: baseUrl
+    value: http://localhost:4101
+    description: ""
+  - name: expectedEnv
+    value: staging
+    description: ""
+  - name: username
+    value: demo
+    description: ""
+  - name: password
+    value: demo
+    description: ""
+  - name: ollamaUrl
+    value: http://localhost:11434
+    description: ""
+  - name: ollamaModel
+    value: llama3.2
+    description: ""

@@ -1,0 +1,19 @@
+info:
+  name: Which Environment Am I On
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{baseUrl}}/env"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+docs: |-
+  Demo: run on Dev, switch the environment dropdown to Staging, run again.
+  Same request, different banner. {{baseUrl}} comes from environments/*.bru.

@@ -1,0 +1,40 @@
+info:
+  name: Get User With Tests
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{baseUrl}}/users/1"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("returns 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("user has name and role", function () {
+          const u = res.getBody();
+          expect(u).to.have.property("name");
+          expect(u.role).to.equal("admin");
+        });
+
+        test("responds from the selected environment", function () {
+          expect(res.getHeader("x-demo-env")).to.equal(bru.getEnvVar("expectedEnv"));
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.id
+      operator: eq
+      value: "1"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true
